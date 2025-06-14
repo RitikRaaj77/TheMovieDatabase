@@ -2,7 +2,6 @@ package com.example.themoviedatabase.userInterface.screens
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -16,12 +15,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
-import coil.request.ImageRequest
+import com.example.themoviedatabase.R
 import com.example.themoviedatabase.userInterface.viewmodel.MovieDetailViewModel
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.shape.RoundedCornerShape
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -69,19 +70,21 @@ fun MovieDetailScreen(navController: NavController, viewModel: MovieDetailViewMo
                         modifier = Modifier
                             .width(260.dp)
                             .height(400.dp)
-                            .padding(end = 16.dp)
                     ) {
                         AsyncImage(
                             model = "https://image.tmdb.org/t/p/w500${movie.poster_path}",
                             contentDescription = movie.title,
                             contentScale = ContentScale.Fit,
-                            modifier = Modifier.fillMaxSize()
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .padding(end = 8.dp)
                         )
                     }
                     Box(
                         modifier = Modifier
                             .weight(1f)
                             .height(400.dp)
+                            .padding(start = 8.dp)
                     ) {
                         Column(
                             modifier = Modifier
@@ -94,17 +97,17 @@ fun MovieDetailScreen(navController: NavController, viewModel: MovieDetailViewMo
                             DetailRow(
                                 label = "Release Date",
                                 value = movie.release_date,
-                                svgResource = "calendar.svg"
+                                iconResource = "calendar"
                             )
                             DetailRow(
                                 label = "Rating",
                                 value = "${movie.vote_average}/10",
-                                svgResource = "star.svg"
+                                iconResource = "star"
                             )
                             DetailRow(
                                 label = "Popularity",
                                 value = movie.popularity.toString(),
-                                svgResource = "trending.svg"
+                                iconResource = "heart"
                             )
                         }
                     }
@@ -136,19 +139,22 @@ fun MovieDetailScreen(navController: NavController, viewModel: MovieDetailViewMo
 }
 
 @Composable
-fun DetailRow(label: String, value: String, svgResource: String) {
+fun DetailRow(label: String, value: String, iconResource: String) {
     Row(
         modifier = Modifier.fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-        AsyncImage(
-            model = ImageRequest.Builder(LocalContext.current)
-                .data("file:///android_res/raw/$svgResource")
-                .decoderFactory(coil.decode.SvgDecoder.Factory())
-                .build(),
+        val resourceId = when (iconResource) {
+            "calendar" -> R.drawable.calendar
+            "star" -> R.drawable.star
+            "heart" -> R.drawable.heart
+            else -> R.drawable.calendar // Fallback
+        }
+        Image(
+            painter = painterResource(id = resourceId),
             contentDescription = label,
-            modifier = Modifier.size(20.dp)
+            modifier = Modifier.size(20.dp).t
         )
         Column {
             Text(

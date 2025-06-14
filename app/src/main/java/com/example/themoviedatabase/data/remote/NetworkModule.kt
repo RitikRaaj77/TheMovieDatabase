@@ -19,7 +19,7 @@ object NetworkModule {
 
         val client = OkHttpClient.Builder()
             .addInterceptor(logging)
-            .connectTimeout(60, TimeUnit.SECONDS) // Increased timeout
+            .connectTimeout(60, TimeUnit.SECONDS)
             .readTimeout(60, TimeUnit.SECONDS)
             .writeTimeout(60, TimeUnit.SECONDS)
             .dns(object : Dns {
@@ -27,7 +27,7 @@ object NetworkModule {
                     return InetAddress.getAllByName(hostname).filter { it is Inet4Address }
                 }
             })
-            .retryOnConnectionFailure(true) // Enable retries
+            .retryOnConnectionFailure(true)
             .build()
 
         return Retrofit.Builder()

@@ -154,7 +154,7 @@ fun DetailRow(label: String, value: String, iconResource: String) {
         Image(
             painter = painterResource(id = resourceId),
             contentDescription = label,
-            modifier = Modifier.size(20.dp).t
+            modifier = Modifier.size(20.dp),
         )
         Column {
             Text(
